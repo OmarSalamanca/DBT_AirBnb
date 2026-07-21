@@ -1,0 +1,53 @@
+version: 2
+
+models:
+  - name: dim_host
+    description: Host dimension table
+    columns:
+      - name: host_id
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_country
+    description: Country dimension table
+    columns:
+      - name: country_code
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_property
+    description: Property dimension table
+    columns:
+      - name: listing_id
+        tests:
+          - unique
+          - not_null
+
+  - name: fact_listing
+    description: Fact table containing listing metrics
+    columns:
+      - name: listing_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_property')
+                field: listing_id
+
+      - name: host_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_host')
+                field: host_id
+
+      - name: country_code
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_country')
+                field: country_code
